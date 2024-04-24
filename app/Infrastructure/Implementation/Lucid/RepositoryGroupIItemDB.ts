@@ -129,4 +129,29 @@ export class RepositoryGroupIItemDB implements RepositoryGroupIItems {
   }
 
 
+  async updateGroupIItemByGroup(id: number): Promise<{message: string}> {
+    try {      
+      const groupIItem = await TblItemIGroup.query().preload('items').where('item_group_id',id);   
+      const items: GroupIItem[] = []
+      
+
+      groupIItem.forEach(async group => {
+        
+        let itemDB = await TblItemIGroup.findOrFail(group.id);
+        group.priceUnit = group.items.basePrice
+        group.tax = group.items.baseTax;
+        group.priceTotal = (group.priceUnit * group.numberUnit)+group.tax; // Calcular
+        itemDB.updateGroupIItem(group);
+        await itemDB.save();
+      });
+      return {message: 'Items update success'}
+
+    } catch (error) {
+      console.log(error);
+      
+      throw new Error("groupIItem no found");
+      
+    }
+  }
+
 }

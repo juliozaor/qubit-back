@@ -9,7 +9,7 @@ export class VersionProject{
   createdUserId?: number;
   updatedUserId?: number;
   conceptnetDrawId: number;
-  revisedDate: DateTime;
+  revisedDate: string;
   executiveSummary: string;
   scopeWork: string;
   tradingConditions: string;

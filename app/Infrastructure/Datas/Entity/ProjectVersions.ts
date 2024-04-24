@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm';
+import { BaseModel, HasOne, column, hasOne } from '@ioc:Adonis/Lucid/Orm';
 import { VersionProject } from 'App/Domain/Data/Entities/VersionProject';
+import TblProject from './Projects';
 
 export default class TblProjectVersion extends BaseModel {
   public static readonly table = 'project_versions';
@@ -29,8 +30,8 @@ export default class TblProjectVersion extends BaseModel {
   @column({ columnName: 'conceptnet_draw_id' })
   public conceptnetDrawId: number;
 
-  @column.dateTime({ columnName: 'revised_date' })
-  public revisedDate: DateTime;
+  @column({ columnName: 'revised_date' })
+  public revisedDate: string;
 
   @column()
   public executiveSummary: string;
@@ -128,5 +129,11 @@ export default class TblProjectVersion extends BaseModel {
     versionProject.userId = this.userId
     return versionProject;
   }
+
+  @hasOne(() => TblProject, {
+    localKey: "projectId",
+    foreignKey: "id",
+  })
+  public project: HasOne<typeof TblProject>;
 
 }

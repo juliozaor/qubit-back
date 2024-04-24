@@ -1,6 +1,9 @@
 import { DateTime } from 'luxon';
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm';
+import { BaseModel, HasOne, column, hasOne } from '@ioc:Adonis/Lucid/Orm';
 import { ConceptDraw } from 'App/Domain/Data/Entities/ConceptDraw';
+import TblClient from './Clients';
+import TblTypeApplication from './TypeApplications';
+import TblTypeProject from './TypeProject';
 
 export default class TblConceptDraw extends BaseModel {
   public static readonly table = 'concept_draws';
@@ -129,5 +132,23 @@ export default class TblConceptDraw extends BaseModel {
   
     return conceptDraw;
   }
+
+  @hasOne(() => TblClient, {
+    localKey: "clientId",
+    foreignKey: "id",
+  })
+  public client: HasOne<typeof TblClient>;
+
+  @hasOne(() => TblTypeApplication, {
+    localKey: "typeApplicationId",
+    foreignKey: "id",
+  })
+  public typeApplication: HasOne<typeof TblTypeApplication>;
+
+  @hasOne(() => TblTypeProject, {
+    localKey: "typeProjectId",
+    foreignKey: "id",
+  })
+  public typeProject: HasOne<typeof TblTypeProject>;
 
 }

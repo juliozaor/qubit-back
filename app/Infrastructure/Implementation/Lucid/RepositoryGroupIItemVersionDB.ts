@@ -63,8 +63,6 @@ export class RepositoryGroupIItemVersionDB
       }); */
       const groupedItems = {};
 
-      console.log(groupIItemVersionDB);
-
       // Recorrer los items del JSON
       groupIItemVersionDB.forEach((version) => {
         const groupId = version.itemsGroup.id;
@@ -143,6 +141,13 @@ export class RepositoryGroupIItemVersionDB
     groupId: number
   ): Promise<{ message: string }> {
     try {
+
+    const groupIVersion = await TblItemIGroupVersion.query().where({'item_group_id':groupId, 'project_version_id': projectId}).first()
+    if(groupIVersion){
+      return { message: "The item group already exists" };
+    }
+
+
       const groups = await TblItemIGroup.query()
         .preload("items")
         .where("item_group_id", groupId);
@@ -156,10 +161,12 @@ export class RepositoryGroupIItemVersionDB
         newGroupIItemVersion.projectVersionId = projectId;
         newGroupIItemVersion.priceUnit = group.items.basePrice;
         newGroupIItemVersion.tax = group.items.baseTax;
+        newGroupIItemVersion.numberUnit = group.numberUnit;
+        newGroupIItemVersion.priceTotal = group.priceTotal;
         await newGroupIItemVersion.save();
       });
 
-      return { message: "Items successfully cloned" };
+      return { message: "Items Group successfully add" };
     } catch (error) {
       console.log(error);
 
@@ -183,10 +190,12 @@ export class RepositoryGroupIItemVersionDB
       let groupIItemVersionDB = await TblItemIGroupVersion.findOrFail(
         groupIItemVersion.id
       );
+      
       groupIItemVersionDB.updateGroupIItemVersion(groupIItemVersion);
       await groupIItemVersionDB.save();
       return groupIItemVersionDB;
     } catch (error) {
+    
       throw new Error("groupIItemVersion no found");
     }
   }
@@ -200,4 +209,45 @@ export class RepositoryGroupIItemVersionDB
       throw new Error("groupIItemVersion no found");
     }
   }
+
+  async deleteGroupIItems(groupId: number, projectId: number): Promise<{ message: string }> {
+    try {
+      let groupIItemVersionDB = await TblItemIGroupVersion.query().where({'item_group_id':groupId, 'project_version_id': projectId});
+
+      groupIItemVersionDB.forEach(async group => {
+        await group.delete();        
+      });
+      return { message: "groupIItemVersion successfully removed" };
+    } catch (error) {
+      throw new Error("groupIItemVersion no found");
+    }
+  }
+
+  async updateGroupIItemVersionByGroup(id: number, projectId:number): Promise<{message: string}> {
+    try {      
+      const groupIItem = await TblItemIGroupVersion.query().preload('items').where('item_group_id',id).where('project_version_id',projectId);   
+      const items: GroupIItemVersion[] = []
+
+      groupIItem.forEach(async group => {
+        
+        let itemDB = await TblItemIGroupVersion.findOrFail(group.id);
+        console.log(itemDB);
+        
+        group.priceUnit = group.items.basePrice
+        group.tax = group.items.baseTax;
+        group.priceTotal = (group.priceUnit * group.numberUnit)+group.tax; // Calcular
+        itemDB.updateGroupIItemVersion(group);
+        await itemDB.save();
+      });
+      return {message: 'Items update success'}
+
+    } catch (error) {
+      console.log(error);
+      
+      throw new Error("groupIItem no found");
+      
+    }
+  }
+
+
 }

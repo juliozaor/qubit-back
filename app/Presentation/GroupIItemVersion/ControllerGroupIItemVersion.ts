@@ -70,14 +70,16 @@ export default class ControllerGroupIItemVersion {
 
   
 
-  public async updateGroupIItemVersionAll ({response, request}:HttpContextContract){
+  public async updateGroupIItemVersionAll ({response, request}:HttpContextContract){    
     try {      
-      const GroupIItemVersionIn = await request.validate({ schema: ItemIGroupVersionValidationRules })
+      const GroupIItemVersionIn:any = request.all() //.validate({ schema: ItemIGroupVersionValidationRules })
       const payload = await request.getPayloadJWT()      
       GroupIItemVersionIn.userId = payload.id
       const GroupIItemVersion = await this.service.updateGroupIItemVersionAll(GroupIItemVersionIn)
       return response.created(GroupIItemVersion)
     } catch (error) {
+      console.log(error);
+      
       return response.badRequest(error.messages)
     }
   }
@@ -90,4 +92,27 @@ export default class ControllerGroupIItemVersion {
     return response.status(200).send({message:'GroupIItemVersion successfully removed'});
   
   }
+
+  public async deleteGroupIItems ({response, params}:HttpContextContract){
+    const groupId = params.groupId
+    const projectId = params.projectId
+    if(!projectId || !groupId){
+      return response.status(400).send({message:'The GroupIItemVersion id is necessary'});
+    }
+    await this.service.deleteGroupIItems(groupId,projectId)
+    return response.status(200).send({message:'GroupIItemVersion successfully removed'});
+  
+  }
+
+  public async updateGroupIItemVersionByGroup ({response, params}:HttpContextContract){    
+    const id = params.id
+    const projectId = params.projectId
+    if(!id){
+      return response.status(400).send({message:'The GroupID id is necessary'});
+    }
+    const GroupIItemVersion = await this.service.updateGroupIItemVersionByGroup(id, projectId)
+      return response.status(200).send(GroupIItemVersion);
+  }
+
+
 }

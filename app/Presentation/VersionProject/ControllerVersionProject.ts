@@ -27,7 +27,7 @@ export default class ControllerVersionVersionProject {
   public async setVersionProject ({response, request}:HttpContextContract){
     try {      
 
-      const VersionProjectIn:any = await request.all()//validate({ schema: VersionProjectValidationRules })
+      const VersionProjectIn:any = request.all()//validate({ schema: VersionProjectValidationRules })
       const payload = await request.getPayloadJWT()      
       VersionProjectIn.userId = payload.id
       const VersionProject = await this.service.setVersionProject(VersionProjectIn)
@@ -74,6 +74,16 @@ export default class ControllerVersionVersionProject {
       return response.status(400).send({message:'The VersionProject id is necessary'});
     }
     const VersionProject = await this.service.cloneVersionProject(id)
+      return response.status(200).send(VersionProject);
+  }
+
+  public async cloneVersionProjectByNewProject ({response, params}:HttpContextContract){
+    const id = params.id
+    const projectId = params.projectId
+    if(!id){
+      return response.status(400).send({message:'The VersionProject id is necessary'});
+    }
+    const VersionProject = await this.service.cloneVersionProjectByNewProject(id, projectId)
       return response.status(200).send(VersionProject);
   }
 

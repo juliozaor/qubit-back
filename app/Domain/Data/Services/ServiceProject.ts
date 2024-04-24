@@ -21,6 +21,8 @@ export class ServiceProject{
   async deleteProject(id:number): Promise<{message: string}>{
     return this.repository.deleteProject(id)
   }
-
+  async cloneProject(id:number): Promise<Project>{
+    return this.repository.cloneProject(id)
+  }
 
 }

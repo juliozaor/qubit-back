@@ -10,5 +10,5 @@ export interface RepositoryGroupIItems {
   setGroupIItem(groupIItem: GroupIItem): Promise<GroupIItem>
   updateGroupIItemAll(groupIItem:GroupIItem): Promise<GroupIItem>
   deleteGroupIItem(id:number): Promise<{message: string}>
-  
+  updateGroupIItemByGroup(id:number): Promise<{message: string}>
 }

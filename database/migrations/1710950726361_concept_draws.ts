@@ -19,9 +19,9 @@ export default class extends BaseSchema {
       table.float("version")
       table.integer("approvedby_client_id")
       table.integer("approvedby_user_id")
-      table.string("xml_base", 255)
-      table.string("xml_autocad", 255)
-      table.string("csv_quote", 255)
+      table.text("xml_base")
+      table.text("xml_autocad")
+      table.text("csv_quote")
 
       table.integer('status_id').defaultTo(1)
       table.integer('user_id')

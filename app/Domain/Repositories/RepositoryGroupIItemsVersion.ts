@@ -11,5 +11,7 @@ export interface RepositoryGroupIItemsVersion {
   setGroupIItemVersion(groupIItemVersion: GroupIItemVersion): Promise<GroupIItemVersion>
   updateGroupIItemVersionAll(groupIItemVersion:GroupIItemVersion): Promise<GroupIItemVersion>
   deleteGroupIItemVersion(id:number): Promise<{message: string}>
-  
+  deleteGroupIItems(groupId: number, projectId: number): Promise<{message: string}>
+  getGroupIItemVersion(id:number): Promise<GroupIItemVersion>
+  updateGroupIItemVersionByGroup(id:number, projectId:number): Promise<{message: string}>
 }

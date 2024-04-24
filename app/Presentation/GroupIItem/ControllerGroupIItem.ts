@@ -80,4 +80,13 @@ export default class ControllerGroupIItem {
     return response.status(200).send({message:'GroupIItem successfully removed'});
   
   }
+
+  public async updateGroupIItemByGroup ({response, params, request}:HttpContextContract){    
+    const id = params.id
+    if(!id){
+      return response.status(400).send({message:'The GroupID id is necessary'});
+    }
+    const GroupIItem = await this.service.updateGroupIItemByGroup(id,)
+      return response.status(200).send(GroupIItem);
+  }
 }

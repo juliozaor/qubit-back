@@ -34,6 +34,12 @@ export class ServiceGroupIItemVersion{
     return this.repository.deleteGroupIItemVersion(id)
   }
 
-  
+  async deleteGroupIItems(groupId: number, projectId: number): Promise<{message: string}>{
+    return this.repository.deleteGroupIItems(groupId, projectId)
+  }
+
+  async updateGroupIItemVersionByGroup(id:number, projectId:number): Promise<{message: string}>{
+    return this.repository.updateGroupIItemVersionByGroup(id, projectId)
+  }
 
 }

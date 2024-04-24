@@ -72,5 +72,16 @@ export class RepositoryProjectDB implements RepositoryProject {
     }
   }
 
-
+  async cloneProject(id: number): Promise<Project> {
+    try {
+      const project = await TblProject.findOrFail(id);
+      const newProject = new TblProject()
+      newProject.setProject(project)
+      await newProject.save()
+      return newProject;      
+    } catch (error) {
+      throw new Error("Project no found");
+      
+    }
+  }
 }

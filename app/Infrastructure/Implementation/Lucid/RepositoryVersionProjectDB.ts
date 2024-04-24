@@ -25,10 +25,10 @@ export class RepositoryVersionProjectDB implements RepositoryVersionProject {
     return { versionProjects, pagination };
   }
 
-  async getVersionProject(id: number): Promise<VersionProject> {
+  async getVersionProject(id: number): Promise<any> {
     try {
-      const versionProject = await TblVersionProject.findOrFail(id);
-      return versionProject.getVersionProject();      
+      const versionProject = await TblVersionProject.query().where('id',id).preload('project').first();
+      return versionProject;      
     } catch (error) {
       throw new Error("VersionProject no found");
       
@@ -36,16 +36,23 @@ export class RepositoryVersionProjectDB implements RepositoryVersionProject {
   }
 
 
-  async setVersionProject(versionProject: VersionProject): Promise<VersionProject> {    
-   
-      let versionProjectDB = new TblVersionProject();
-      versionProjectDB.setVersionProject(versionProject);
-      await versionProjectDB.save();   
-      return versionProjectDB;          
+  async setVersionProject(versionProject: VersionProject): Promise<VersionProject> {  
+    const date = new Date(versionProject.revisedDate.toString());
+    const dateFormat = date.toISOString();
+    versionProject.revisedDate=dateFormat
+
+     let versionProjectDB = new TblVersionProject();
+     versionProjectDB.setVersionProject(versionProject);
+     await versionProjectDB.save();   
+     return versionProjectDB;          
+     
   }
 
   async updateVersionProjectAll(versionProject:VersionProject): Promise<VersionProject> {
     try {
+      const date = new Date(versionProject.revisedDate.toString());
+      const dateFormat = date.toISOString();
+      versionProject.revisedDate=dateFormat
       let versionProjectDB = await TblVersionProject.findOrFail(versionProject.id);
       versionProjectDB.updateVersionProject(versionProject);
       await versionProjectDB.save();
@@ -92,6 +99,21 @@ export class RepositoryVersionProjectDB implements RepositoryVersionProject {
         
     try {
       const versionProject = await TblVersionProject.findOrFail(id);
+      const newVersionProject = new TblVersionProject()
+      newVersionProject.setVersionProject(versionProject)
+      await newVersionProject.save()
+      return newVersionProject;      
+    } catch (error) {
+      throw new Error("VersionProject no found");
+      
+    }
+  }
+
+  async cloneVersionProjectByNewProject(id: number, projectId:number): Promise<VersionProject> {
+        
+    try {
+      const versionProject = await TblVersionProject.findOrFail(id);
+      versionProject.projectId = projectId
       const newVersionProject = new TblVersionProject()
       newVersionProject.setVersionProject(versionProject)
       await newVersionProject.save()

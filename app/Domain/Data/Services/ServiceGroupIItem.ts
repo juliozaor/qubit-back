@@ -30,6 +30,8 @@ export class ServiceGroupIItem{
     return this.repository.deleteGroupIItem(id)
   }
 
-  
+  async updateGroupIItemByGroup(id:number): Promise<{message: string}>{
+    return this.repository.updateGroupIItemByGroup(id)
+  }
 
 }

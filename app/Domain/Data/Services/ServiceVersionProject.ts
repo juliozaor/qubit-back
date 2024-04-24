@@ -9,7 +9,7 @@ export class ServiceVersionProject{
   async getVersionProjects(param: any): Promise<{versionProjects: VersionProject[], pagination: Pager}>{
     return this.repository.getVersionProjects(param)
   }
-  async getVersionProject(id:number): Promise<VersionProject>{
+  async getVersionProject(id:number): Promise<any>{
     return this.repository.getVersionProject(id)
   }
   async setVersionProject(VersionProject: VersionProject): Promise<VersionProject>{
@@ -28,6 +28,10 @@ export class ServiceVersionProject{
 
   async getVersionProjectByProject(id:number, param: any): Promise<{versionProjects:VersionProject[], pagination: Pager}>{
     return this.repository.getVersionProjectByProject(id, param)
+  }
+
+  async cloneVersionProjectByNewProject(id:number, projectId:number): Promise<VersionProject>{
+    return this.repository.cloneVersionProjectByNewProject(id, projectId)
   }
 
 

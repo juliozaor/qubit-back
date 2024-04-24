@@ -56,4 +56,13 @@ export default class ControllerProject {
     return response.status(400).send({message:'Project successfully removed'});
   
   }
+
+  public async cloneProject ({response, params}:HttpContextContract){
+    const id = params.id
+    if(!id){
+      return response.status(400).send({message:'The Project id is necessary'});
+    }
+    const Project = await this.service.cloneProject(id)
+      return response.status(200).send(Project);
+  }
 }

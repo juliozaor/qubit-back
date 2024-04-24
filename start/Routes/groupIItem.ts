@@ -8,5 +8,6 @@ Route.group(() => {
   Route.get('/clone/:idOld/:idNew', accion_path + '.cloneGroupIItemByGroup')
   Route.post('/', accion_path + '.setGroupIItem')
   Route.put('/', accion_path + '.updateGroupIItemAll') 
+  Route.put('/group/:id', accion_path + '.updateGroupIItemByGroup')
   Route.delete('/:id', accion_path + '.deleteGroupIItem')
 }).prefix('api/v1/items_i_group')

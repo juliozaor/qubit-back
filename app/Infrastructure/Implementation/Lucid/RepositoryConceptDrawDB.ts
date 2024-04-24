@@ -5,10 +5,10 @@ import { ConceptDraw } from "App/Domain/Data/Entities/ConceptDraw";
 import { RepositoryConceptDraw } from "App/Domain/Repositories/RepositoryConceptDraw";
 export class RepositoryConceptDrawDB implements RepositoryConceptDraw {
   async getConceptDraws(params: any): Promise<{conceptDraws: ConceptDraw[], pagination: Pager}> {
-    const conceptDraws: ConceptDraw[] = [];
+    const conceptDraws: any[] = [];
     const { term, page, limit } = params;
 
-    const sql = TblConceptDraw.query();
+    const sql = TblConceptDraw.query().preload('client').preload('typeProject').preload('typeApplication');
     if (term) {
       sql.andWhere((subquery) => {
         subquery.whereRaw("LOWER(version) LIKE LOWER(?)", [`%${term}%`]);
@@ -19,9 +19,16 @@ export class RepositoryConceptDrawDB implements RepositoryConceptDraw {
 
     const conceptDrawDB = await sql.orderBy("name", "asc").paginate(page, limit);
 
-    conceptDrawDB.forEach((conceptDrawDB) => {
-      conceptDraws.push(conceptDrawDB.getConceptDraw());
+    conceptDrawDB.forEach((conceptDrawDB:any) => {
+      const conceptDrawAll = conceptDrawDB.getConceptDraw()
+      conceptDrawAll.clientName = conceptDrawDB.client?.names
+      conceptDrawAll.typeProject = conceptDrawDB.typeProject?.name
+      conceptDrawAll.typeApplication = conceptDrawDB.typeApplication?.name
+      conceptDraws.push(conceptDrawAll)
+      //conceptDraws.push(conceptDrawDB.getConceptDraw());
     });
+    
+
     const pagination = PaginationMapperDB.getPager(conceptDrawDB);
     return { conceptDraws, pagination };
   }
