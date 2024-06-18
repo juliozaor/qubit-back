@@ -80,4 +80,68 @@ export class RepositoryGroupItemDB implements RepositoryGroupItems {
   }
 
 
+  async getGroupsItems(params: any): Promise<{ groupItems: any}> {
+    const groupItems = new Array();
+    const { term, page, limit } = params;
+
+    const groupItemDB = await TblItemGroups.query().preload('itemsIGroup', sItem =>{
+      sItem.preload('items')
+    });
+   /*  if (term) {
+      sql.andWhere((subquery) => {
+        subquery.whereRaw("LOWER(code) LIKE LOWER(?)", [`%${term}%`]);
+        subquery.orWhereRaw("LOWER(name) LIKE LOWER(?)", [`%${term}%`]);
+      });
+    }
+ */
+   /*  const groupItemDB = await sql.orderBy("name", "asc").paginate(page, limit); */
+    
+/*     const groupItems = groupItemDB.map(group =>{
+      return {
+        groupId: group.id,
+        groupName: group.name,
+        items: group.itemsIGroup.map( itemGroup =>{
+          return {
+            itemId: itemGroup.id,
+            itemName: itemGroup.items.name,
+            itemDescription: itemGroup.items.description,
+            itemQuantity: itemGroup.numberUnit,
+            itemPrice: itemGroup.priceUnit,
+            itemTotalSell: itemGroup.priceTotal,
+            itemMargin:  itemGroup.margin,
+            itemCost: itemGroup.cost,
+            itemTotalCost: itemGroup.costTotal
+
+        }
+      }
+      )
+        
+      }
+    }) */
+
+    groupItemDB.forEach((group) => {
+      const items = new Array();
+      group.itemsIGroup.forEach((itemGroup)=>{
+        items.push({
+          itemId: itemGroup.id,
+            itemName: itemGroup.items.name,
+            itemDescription: itemGroup.items.description,
+            itemQuantity: itemGroup.numberUnit,
+            itemPrice: itemGroup.priceUnit,
+            itemTotalSell: itemGroup.priceTotal,
+            itemMargin:  itemGroup.margin,
+            itemCost: itemGroup.cost,
+            itemTotalCost: itemGroup.costTotal
+        })
+      })
+      groupItems.push({
+        groupId: group.id,
+        groupName: group.name,
+        items
+      });
+    });
+   /*  const pagination = PaginationMapperDB.getPager(groupItemDB); */
+    return { groupItems };
+  }
+
 }

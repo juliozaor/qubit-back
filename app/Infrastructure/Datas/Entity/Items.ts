@@ -35,6 +35,11 @@ export default class TblItem extends BaseModel {
   @column({ columnName: "user_id" })
   public userId?: number;
 
+  @column({ columnName: "cost" })
+  public cost?: number;
+
+
+
   @column.dateTime({ autoCreate: true, columnName: "created_time" })
   public createdTime: DateTime;
 
@@ -55,6 +60,7 @@ export default class TblItem extends BaseModel {
     this.baseTax = item.baseTax
     this.typeUnitId = item.typeUnitId
     this.statusId = item.statusId
+    this.cost = item.cost
     this.userId = item.userId
   }
 
@@ -68,6 +74,7 @@ export default class TblItem extends BaseModel {
     this.typeUnitId = item.typeUnitId
     this.statusId = item.statusId
     this.userId = item.userId
+    this.cost = item.cost
   }
 
   public getItem(): Item {
@@ -82,6 +89,7 @@ export default class TblItem extends BaseModel {
     item.typeUnitId = this.typeUnitId;
     item.statusId = this.statusId;
     item.userId = this.userId;
+    item.cost = this.cost
     return item;
   }
 }

@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, HasMany, column, hasMany } from "@ioc:Adonis/Lucid/Orm";
 import { GroupItem } from "App/Domain/Data/Entities/GroupItem";
+import TblItemIGroup from "./ItemIGroups";
 
 export default class TblItemGroup extends BaseModel {
   public static readonly table = "item_groups";
@@ -54,4 +55,10 @@ export default class TblItemGroup extends BaseModel {
     item.userId = this.userId;
     return item;
   }
+
+  @hasMany(() => TblItemIGroup, {
+    localKey: "id",
+    foreignKey: "itemGroupId",
+  })
+  public itemsIGroup: HasMany<typeof TblItemIGroup>;
 }

@@ -8,4 +8,7 @@ export class GroupIItem{
   tax: number;
   statusId?: number;
   userId?: number;
+  cost?: number;
+  costTotal?: number;
+  margin?: number;
 }

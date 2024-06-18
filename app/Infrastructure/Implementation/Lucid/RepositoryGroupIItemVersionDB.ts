@@ -44,7 +44,7 @@ export class RepositoryGroupIItemVersionDB
   async getGroupIItemVersionByGroup(
     id: number,
     params: any
-  ): Promise<{ groupIItemVersions: GroupIItemVersion[]; pagination: Pager }> {
+  ): Promise<{ groupIItemVersions: any; pagination: Pager }> {
     const { term, page, limit } = params;
     /*   const groupIItemVersions: GroupIItemVersion[] = []; */
 
@@ -89,6 +89,10 @@ export class RepositoryGroupIItemVersionDB
             priceTotal: version.priceTotal,
             numberUnit: version.numberUnit,
             tax: version.tax,
+            cost: version.cost,
+            costTotal:version.costTotal,
+            margin: version.margin,
+            actualQuantity: version.actualQuantity
           });
         }
       });
@@ -163,6 +167,10 @@ export class RepositoryGroupIItemVersionDB
         newGroupIItemVersion.tax = group.items.baseTax;
         newGroupIItemVersion.numberUnit = group.numberUnit;
         newGroupIItemVersion.priceTotal = group.priceTotal;
+        newGroupIItemVersion.cost = group.cost;
+        newGroupIItemVersion.costTotal = group.costTotal;
+        newGroupIItemVersion.margin = group.margin;
+        newGroupIItemVersion.actualQuantity = group.actualQuantity;
         await newGroupIItemVersion.save();
       });
 
@@ -236,6 +244,10 @@ export class RepositoryGroupIItemVersionDB
         group.priceUnit = group.items.basePrice
         group.tax = group.items.baseTax;
         group.priceTotal = (group.priceUnit * group.numberUnit)+group.tax; // Calcular
+        group.cost = group.items.cost;
+        group.actualQuantity = group.items.quantity
+        group.costTotal = (group.numberUnit * (group.cost??0))
+        group.margin = parseFloat(((group.priceUnit - (group.cost ?? 0)) / (group.cost ?? 0) * 100).toFixed(2));
         itemDB.updateGroupIItemVersion(group);
         await itemDB.save();
       });

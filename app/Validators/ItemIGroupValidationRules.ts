@@ -10,4 +10,8 @@ export const ItemIGroupValidationRules = schema.create({
   tax: schema.number(),
   statusId: schema.number.optional(),
   userId: schema.number.optional(),
+  cost: schema.number.optional(),
+  costTotal: schema.number.optional(),
+  margin: schema.number.optional(),
+  actualQuantity: schema.number.optional(),
 }) 

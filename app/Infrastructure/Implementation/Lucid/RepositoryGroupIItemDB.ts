@@ -55,7 +55,11 @@ export class RepositoryGroupIItemDB implements RepositoryGroupIItems {
           priceTotal: group.priceTotal,
           priceUnit : group.priceUnit,
           numberUnit: group.numberUnit,
-          tax: group.tax
+          tax: group.tax,
+          cost: group.cost,
+          costTotal:group.costTotal,
+          margin: group.margin,
+          actualQuantity: group.actualQuantity
         })
       });
       const groupItems = {
@@ -141,6 +145,10 @@ export class RepositoryGroupIItemDB implements RepositoryGroupIItems {
         group.priceUnit = group.items.basePrice
         group.tax = group.items.baseTax;
         group.priceTotal = (group.priceUnit * group.numberUnit)+group.tax; // Calcular
+        group.cost = group.items.cost;
+        group.actualQuantity = group.items.quantity
+        group.costTotal = (group.numberUnit * (group.cost??0))
+        group.margin = parseFloat(((group.priceUnit - (group.cost ?? 0)) / (group.cost ?? 0) * 100).toFixed(2));
         itemDB.updateGroupIItem(group);
         await itemDB.save();
       });

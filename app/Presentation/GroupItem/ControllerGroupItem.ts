@@ -63,4 +63,9 @@ export default class ControllerGroupItem {
     return response.status(200).send({message:'GroupItem successfully removed'});
   
   }
+
+  public async getGroupsItems ({response, request}:HttpContextContract){
+    const GroupItems = await this.service.getGroupsItems(request.all())
+    return response.status(200).send(GroupItems);
+}
 }

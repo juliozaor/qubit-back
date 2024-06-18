@@ -27,5 +27,7 @@ export class ServiceGroupItem{
     return this.repository.deleteGroupItem(id)
   }
 
-
+  async getGroupsItems(param: any): Promise<{groupItems: any}>{
+    return this.repository.getGroupsItems(param)
+  }
 }

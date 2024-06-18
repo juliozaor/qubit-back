@@ -34,8 +34,19 @@ export default class TblItemIGroup extends BaseModel {
   @column({ columnName: "user_id" })
   public userId?: number;
 
+  @column({ columnName: "cost" })
+  public cost?: number;
+
+  @column({ columnName: "cost_total" })
+  public costTotal?: number;
+
+  @column({ columnName: "margin" })
+  public margin?: number;
+
+
   @column.dateTime({ autoCreate: true, columnName: "created_time" })
   public createdTime: DateTime;
+
 
   @column.dateTime({
     autoCreate: true,
@@ -54,6 +65,11 @@ export default class TblItemIGroup extends BaseModel {
     this.tax = iItem.tax
     this.statusId = iItem.statusId
     this.userId = iItem.userId
+    this.cost = iItem.cost
+    this.costTotal = iItem.costTotal
+    this.margin = iItem.margin
+    this.actualQuantity = iItem.actualQuantity
+  
   }
 
   public setGroupIItem(iItem: GroupIItem) {
@@ -65,6 +81,10 @@ export default class TblItemIGroup extends BaseModel {
     this.tax = iItem.tax
     this.statusId = iItem.statusId
     this.userId = iItem.userId
+    this.cost = iItem.cost
+    this.costTotal = iItem.costTotal
+    this.margin = iItem.margin
+    this.actualQuantity = iItem.actualQuantity
   }
 
   public getGroupIItem(): GroupIItem {
@@ -78,6 +98,10 @@ export default class TblItemIGroup extends BaseModel {
     iItem.tax = this.tax;
     iItem.statusId = this.statusId;
     iItem.userId = this.userId;
+    iItem.cost = this.cost
+    iItem.costTotal = this.costTotal
+    iItem.margin = this.margin
+    iItem.actualQuantity = this.actualQuantity
     return iItem;
   }
 

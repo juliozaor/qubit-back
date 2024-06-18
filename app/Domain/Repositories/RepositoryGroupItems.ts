@@ -4,6 +4,7 @@ import { Pager } from '../Pager';
 
 export interface RepositoryGroupItems {
   getGroupItems(param: any): Promise<{groupItems: GroupItem[], pagination: Pager}>
+  getGroupsItems(param: any): Promise<{groupItems: any}>
   getGroupItem(id:number): Promise<GroupItem>
   cloneGroupItem(id:number): Promise<GroupItem>
   setGroupItem(groupItem: GroupItem): Promise<GroupItem>

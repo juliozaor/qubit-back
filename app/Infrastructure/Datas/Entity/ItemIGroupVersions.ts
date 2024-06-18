@@ -38,6 +38,15 @@ export default class TblItemIGroupVersion extends BaseModel {
   @column({ columnName: "user_id" })
   public userId?: number;
 
+  @column({ columnName: "cost" })
+  public cost?: number;
+
+  @column({ columnName: "cost_total" })
+  public costTotal?: number;
+
+  @column({ columnName: "margin" })
+  public margin?: number;
+
   @column.dateTime({ autoCreate: true, columnName: "created_time" })
   public createdTime: DateTime;
 
@@ -59,6 +68,11 @@ export default class TblItemIGroupVersion extends BaseModel {
     this.tax = iItem.tax
     this.statusId = iItem.statusId
     this.userId = iItem.userId
+    this.cost = iItem.cost
+    this.costTotal = iItem.costTotal
+    this.margin = iItem.margin
+    
+  
   }
 
   public setGroupIItemVersion(iItem: GroupIItemVersion) {
@@ -71,6 +85,11 @@ export default class TblItemIGroupVersion extends BaseModel {
     this.tax = iItem.tax
     this.statusId = iItem.statusId
     this.userId = iItem.userId
+    this.cost = iItem.cost
+    this.costTotal = iItem.costTotal
+    this.margin = iItem.margin
+    
+  
   }
 
   public getGroupIItemVersion(): GroupIItemVersion {
@@ -85,6 +104,10 @@ export default class TblItemIGroupVersion extends BaseModel {
     iItem.tax = this.tax;
     iItem.statusId = this.statusId;
     iItem.userId = this.userId;
+    iItem.cost = this.cost
+    iItem.costTotal = this.costTotal
+    iItem.margin = this.margin
+   
     return iItem;
   }
 

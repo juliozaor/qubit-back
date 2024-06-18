@@ -3,6 +3,7 @@ const accion_path = '../../../app/Presentation/GroupItem/ControllerGroupItem'
 
 Route.group(() => {
   Route.get('/', accion_path + '.getGroupItems')
+  Route.get('/groups', accion_path + '.getGroupsItems')
   Route.get('/:id', accion_path + '.getGroupItem')
   Route.get('/clone/:id', accion_path + '.cloneGroupItem')
   Route.post('/', accion_path + '.setGroupItem')

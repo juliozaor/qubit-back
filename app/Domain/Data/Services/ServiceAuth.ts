@@ -54,9 +54,7 @@ export class ServicioAutenticacion {
           throw new Exception('El usuario se encuentra bloqueado por exceder el número de intentos de inicio de sesión, intente recuperar contraseña', 423)
     } */
     
-    if (!usuarioVerificado) {
-      /* this.manejarIntentoFallido(registroDeBloqueo) */
-      
+    if (!usuarioVerificado) {      
           throw new Exception('Usuario no registrado en el sistema, valide el acceso con el administrador', 400)
     }
 

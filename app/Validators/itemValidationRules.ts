@@ -11,4 +11,5 @@ export const itemValidationRules = schema.create({
   typeUnitId: schema.number([rules.required()]),
   statusId: schema.number.optional(),
   userId: schema.number.optional(),
+  cost: schema.number.optional(),
 }) 
