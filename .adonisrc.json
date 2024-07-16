@@ -34,6 +34,7 @@
     "./start/Routes/item",
     "./start/Routes/poject",
     "./start/Routes/master",
+    "./start/Routes/category",
     "./start/Routes/versionProject"
   ],
   "providers": [

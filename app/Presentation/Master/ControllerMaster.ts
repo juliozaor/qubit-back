@@ -7,6 +7,7 @@ import TblTypeApplication from 'App/Infrastructure/Datas/Entity/TypeApplications
 import TblTypeItem from 'App/Infrastructure/Datas/Entity/TypeItems';
 import TblTypeProject from 'App/Infrastructure/Datas/Entity/TypeProject';
 import TblTypeUnit from 'App/Infrastructure/Datas/Entity/TypeUnits';
+import TblCategory from 'App/Infrastructure/Datas/Entity/Categories';
 
 export default class ControllerMaster {
   constructor () {
@@ -46,6 +47,11 @@ public async getTypeUnits ({response}:HttpContextContract){
 public async getprojectStatus ({response}:HttpContextContract){
   const projectStatus = await TblProjectStatus.all()
    return response.status(200).send({projectStatus});
+}
+
+public async getCategories ({response}:HttpContextContract){
+  const categories = await TblCategory.all()
+   return response.status(200).send({categories});
 }
 
 }

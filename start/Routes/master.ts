@@ -9,4 +9,5 @@ Route.group(() => {
   Route.get('/typeProject', accion_path + '.getTypeProjects')
   Route.get('/typeUnit', accion_path + '.getTypeUnits')
   Route.get('/projectStatus', accion_path + '.getprojectStatus')
+  Route.get('/categories', accion_path + '.getCategories')
 }).prefix('api/v1/masters').middleware('authJwt')

@@ -10,4 +10,5 @@ export class Item{
   statusId?: number;
   userId?: number;
   cost?: number;
+  categoryId:number;
 }
