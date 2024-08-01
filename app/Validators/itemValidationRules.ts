@@ -9,6 +9,7 @@ export const itemValidationRules = schema.create({
   basePrice: schema.number([rules.required()]),
   baseTax: schema.number([rules.required()]),
   typeUnitId: schema.number([rules.required()]),
+  categoryId: schema.number([rules.required()]),
   statusId: schema.number.optional(),
   userId: schema.number.optional(),
   cost: schema.number.optional(),

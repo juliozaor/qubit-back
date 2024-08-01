@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
-import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import { BaseModel, BelongsTo, belongsTo, column } from "@ioc:Adonis/Lucid/Orm";
 import { Item } from "App/Domain/Data/Entities/Item";
+import Categories from "./Categories";
 
 export default class TblItem extends BaseModel {
   public static readonly table = "items";
@@ -38,6 +39,9 @@ export default class TblItem extends BaseModel {
   @column({ columnName: "cost" })
   public cost?: number;
 
+  @column({ columnName: "category_id" })
+  public categoryId: number;
+
 
 
   @column.dateTime({ autoCreate: true, columnName: "created_time" })
@@ -62,6 +66,7 @@ export default class TblItem extends BaseModel {
     this.statusId = item.statusId
     this.cost = item.cost
     this.userId = item.userId
+    this.categoryId = item.categoryId
   }
 
   public setItem (item: Item) {
@@ -75,6 +80,7 @@ export default class TblItem extends BaseModel {
     this.statusId = item.statusId
     this.userId = item.userId
     this.cost = item.cost
+    this.categoryId = item.categoryId
   }
 
   public getItem(): Item {
@@ -90,6 +96,10 @@ export default class TblItem extends BaseModel {
     item.statusId = this.statusId;
     item.userId = this.userId;
     item.cost = this.cost
+    item.categoryId = this.categoryId
     return item;
   }
+
+  @belongsTo(() => Categories)
+  public category: BelongsTo<typeof Categories>
 }

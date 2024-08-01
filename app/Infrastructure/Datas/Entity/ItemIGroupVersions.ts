@@ -4,6 +4,7 @@ import { GroupIItemVersion } from 'App/Domain/Data/Entities/GroupIItemVersion';
 import TblItemGroup from './ItemGroups';
 import TblProjectVersion from './ProjectVersions';
 import TblItem from './Items';
+import TblCategory from 'App/Infrastructure/Datas/Entity/Categories';
 
 export default class TblItemIGroupVersion extends BaseModel {
   public static readonly table = 'item_i_group_versions';
@@ -122,6 +123,12 @@ export default class TblItemIGroupVersion extends BaseModel {
     foreignKey: "itemGroupId",
   })
   public itemsGroup: BelongsTo<typeof TblItemGroup>;
+
+  @belongsTo(() => TblCategory, {
+    localKey: "id",
+    foreignKey: "itemGroupId",
+  })
+  public category: BelongsTo<typeof TblCategory>;
 
   @belongsTo(() => TblProjectVersion, {
     localKey: "id",

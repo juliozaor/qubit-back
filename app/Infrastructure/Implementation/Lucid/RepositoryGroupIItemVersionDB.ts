@@ -4,6 +4,7 @@ import { GroupIItemVersion } from "App/Domain/Data/Entities/GroupIItemVersion";
 import TblItemIGroupVersion from "App/Infrastructure/Datas/Entity/ItemIGroupVersions";
 import { RepositoryGroupIItemsVersion } from "App/Domain/Repositories/RepositoryGroupIItemsVersion";
 import TblItemIGroup from "App/Infrastructure/Datas/Entity/ItemIGroups";
+import TblItem from "App/Infrastructure/Datas/Entity/Items";
 export class RepositoryGroupIItemVersionDB
   implements RepositoryGroupIItemsVersion
 {
@@ -53,11 +54,14 @@ export class RepositoryGroupIItemVersionDB
     try {
       const groupIItemVersionDB = await TblItemIGroupVersion.query()
         .preload("items")
-        .preload("itemsGroup")
+        .preload("category")
         .where("project_version_id", id)
         .orderBy("id", "asc")
         .paginate(page, limit);
 
+
+        console.log(groupIItemVersionDB);
+        
       /*  groupIItemVersionDB.forEach((groupIItemVersion) => {
         groupIItemVersions.push(groupIItemVersion.getGroupIItemVersion());
       }); */
@@ -65,15 +69,14 @@ export class RepositoryGroupIItemVersionDB
 
       // Recorrer los items del JSON
       groupIItemVersionDB.forEach((version) => {
-        const groupId = version.itemsGroup.id;
+        const groupId = version.category.id;
         if (groupId) {
           // Si el grupo aún no existe en el objeto, crearlo
           if (!groupedItems[groupId]) {
             groupedItems[groupId] = {
               itemsGroup: {
-                id: version.itemsGroup.id,
-                code: version.itemsGroup.code,
-                name: version.itemsGroup.name,
+                id: version.category.id,
+                name: version.category.name,
                 items: [],
               },
             };
@@ -92,7 +95,7 @@ export class RepositoryGroupIItemVersionDB
             cost: version.cost,
             costTotal:version.costTotal,
             margin: version.margin,
-            actualQuantity: version.actualQuantity
+          //  actualQuantity: version.actualQuantity
           });
         }
       });
@@ -140,7 +143,7 @@ export class RepositoryGroupIItemVersionDB
     }
   }
 
-  async addGroupIItemVersion(
+  /* async addGroupIItemVersion(
     projectId: number,
     groupId: number
   ): Promise<{ message: string }> {
@@ -155,9 +158,6 @@ export class RepositoryGroupIItemVersionDB
       const groups = await TblItemIGroup.query()
         .preload("items")
         .where("item_group_id", groupId);
-      /*  const groupIItemVersions: GroupIItemVersion[] = [];
-      const groupIItemVersionDB = await TblItemIGroupVersion.query().where('project_version_id',idOld);
-       */
       groups.forEach(async (group) => {
         const newGroupIItemVersion = new TblItemIGroupVersion();
         newGroupIItemVersion.itemId = group.itemId;
@@ -180,7 +180,60 @@ export class RepositoryGroupIItemVersionDB
 
       throw new Error("groupIItemVersion no found");
     }
-  }
+  } */
+
+    async addGroupIItemVersion(
+      projectId: number,
+      groupId: number
+    ): Promise<{ message: string }> {
+      try {
+  
+      const groupIVersion = await TblItemIGroupVersion.query().where({'item_group_id':groupId, 'project_version_id': projectId}).first()
+      if(groupIVersion){
+        return { message: "The item group already exists" };
+      }
+  
+  
+       /*  const groups = await TblItemIGroup.query()
+          .preload("items")
+          .where("item_group_id", groupId); */
+  /*       groups.forEach(async (group) => {
+          const newGroupIItemVersion = new TblItemIGroupVersion();
+          newGroupIItemVersion.itemId = group.itemId;
+          newGroupIItemVersion.itemGroupId = group.itemGroupId;
+          newGroupIItemVersion.projectVersionId = projectId;
+          newGroupIItemVersion.priceUnit = group.items.basePrice;
+          newGroupIItemVersion.tax = group.items.baseTax;
+          newGroupIItemVersion.numberUnit = group.numberUnit;
+          newGroupIItemVersion.priceTotal = group.priceTotal;
+          newGroupIItemVersion.cost = group.cost;
+          newGroupIItemVersion.costTotal = group.costTotal;
+          newGroupIItemVersion.margin = group.margin;
+          newGroupIItemVersion.actualQuantity = group.actualQuantity;
+          await newGroupIItemVersion.save();
+        }); */
+
+
+        const itemsCategory = await TblItem.query().where('categoryId', groupId )
+        itemsCategory.forEach(async (item) => {
+          const newGroupIItemVersion = new TblItemIGroupVersion();
+          newGroupIItemVersion.itemId = item.id;
+          newGroupIItemVersion.itemGroupId = item.categoryId;
+          newGroupIItemVersion.projectVersionId = projectId;
+          newGroupIItemVersion.priceUnit = item.basePrice;
+          newGroupIItemVersion.tax = item.baseTax;
+          newGroupIItemVersion.cost = item.cost;
+          await newGroupIItemVersion.save();
+        });
+        
+        
+        return { message: "Items Group successfully add" };
+      } catch (error) {
+        console.log(error);
+  
+        throw new Error("groupIItemVersion no found");
+      }
+    }
 
   async setGroupIItemVersion(
     groupIItemVersion: GroupIItemVersion
